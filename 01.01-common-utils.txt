@@ -104,13 +104,18 @@ src/ext.  These provide intrusive hashtable and linked-list macros.
 
 ===  Cryptography
 
+Once, we tried to keep our cryptography code in a single "crypto.c" file,
+with an "aes.c" module containing an AES implementation for use with older
+OpenSSLs.
 
-aes.c crypt
+Now, our practice has become to introduce crypto_*.c modules when adding new
+cryptography backend code.  We have modules for Ed25519, Curve25519,
+secret-to-key algorithms, and password-based boxed encryption.
 
-crypto.c crypt
-crypto_curve25519.c crypto
-crypto_ed25519.c crypt
-crypto_format.c crypt
-crypto_pwbox.c crypt
-crypto_s2k.c crypt
-tortls.c crypto
+Our various TLS compatibility code, wrappers, and hacks are kept in
+tortls.c, which is probably too full of Tor-specific kludges.  I'm
+hoping we can eliminate most of those kludges when we finally remove
+support for older versions of our TLS handshake.
+
+
+
