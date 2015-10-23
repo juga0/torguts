@@ -97,7 +97,7 @@ heap-based priority queues.
 There's a bit-array type.
 
 A set of mapping types to map strings, 160-bit digests, and 256-bit digests
-to void *.  These are what we generally use when we want O(1) lookup.
+to void \*.  These are what we generally use when we want O(1) lookup.
 
 Additionally, for containers, we use the ht.h and tor_queue.h headers, in
 src/ext.  These provide intrusive hashtable and linked-list macros.
@@ -108,7 +108,7 @@ Once, we tried to keep our cryptography code in a single "crypto.c" file,
 with an "aes.c" module containing an AES implementation for use with older
 OpenSSLs.
 
-Now, our practice has become to introduce crypto_*.c modules when adding new
+Now, our practice has become to introduce crypto_\*.c modules when adding new
 cryptography backend code.  We have modules for Ed25519, Curve25519,
 secret-to-key algorithms, and password-based boxed encryption.
 

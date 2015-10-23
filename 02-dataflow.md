@@ -53,11 +53,13 @@ to respond to the information.  Some examples included:
    * connection_process_inbuf() -- called when more data arrives on
      the inbuf.
 
-These functions
-
+These functions then call into specific implementations depending on
+the type of the connection.  For example, if the connection is an
+edge_connection_t, connection_reached_eof() will call
+connection_edge_reached_eof().
 
    * NOTE: "Also there are bufferevents!"  We have a vestigial
-     implementation fo ra n alternative low-level networking
+     implementation for an alternative low-level networking
      implementation, based on Libevent's evbuffer and bufferevent
      code.  These two object types take on (most of) the roles of
      buffers and connections respectively. It isn't working in today's
@@ -67,7 +69,6 @@ These functions
 
 
 ==== Controlling connections
-
 
 A connection can have reading or writing enabled or disabled for a
 wide variety of reasons, including:
