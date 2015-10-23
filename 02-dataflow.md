@@ -58,7 +58,7 @@ the type of the connection.  For example, if the connection is an
 edge_connection_t, connection_reached_eof() will call
 connection_edge_reached_eof().
 
-> NOTE: "Also there are bufferevents!"  We have vestigial
+> **Note:** "Also there are bufferevents!"  We have vestigial
 > code for an alternative low-level networking
 > implementation, based on Libevent's evbuffer and bufferevent
 > code.  These two object types take on (most of) the roles of
@@ -89,10 +89,12 @@ read/write suspensions.
 
 #### Kinds of connections ####
 
-Today Tor has the following connection and pseudoconnection types:
+Today Tor has the following connection and pseudoconnection types.
+For the most part, each type of channel has an associated C module
+that implements its underlying logic.
 
 **Edge connections** receive data from and deliver data to points
-outside the onion routing network.  They fall into two types:
+outside the onion routing network.  See `connection_edge.c`. They fall into two types:
 
 **Entry connections** are a type of edge connection. They receive data
 from the user running a Tor client, and deliver data to that user.
@@ -105,27 +107,74 @@ exit node, and transmit traffic to and from the network.
 
 (Entry connections and exit connections are also used as placeholders
 when performing a remote DNS request; they are not decoupled from the
-notion of "stream" in the Tor protocol.)
+notion of "stream" in the Tor protocol. This is implemented partially
+in `connection_edge.c`, and partially in `dnsserv.c` and `dns.c`.)
 
-**OR connections** send and receive Tor cells over
-TLS, using some version of the Tor link protocol.
+**OR connections** send and receive Tor cells over TLS, using some
+version of the Tor link protocol.  Their implementation is spread
+across `connection_or.c`, with a bit of logic in `command.c`,
+`relay.c`, and `channeltls.c`.
+
+**Extended OR connections** are a type of OR connection for use on
+bridges using pluggable transports, so that the PT can tell the bridge
+some information about the incoming connection before passing on its
+data.  They are implemented in `ext_orport.c`.
 
 **Directory connections** are server-side or client-side connections
 that implement Tor's HTTP-based directory protocol.  These are
 instantiated using a socket when Tor is making an unencrypted HTTP
 connection.  When Tor is tunneling a directory request over a Tor
-circuit, directory connections
+circuit, directory connections are implemented using a linked
+connection pair (see below).  Directory connections are implemeted in
+`directory.c`; some of the server-side logic is implemented in
+`dirserver.c`.
 
-**Controller connections** 
+**Controller connections** are local connections to a controller
+process implementing the controller protocol from
+control-spec.txt. These are in `control.c`
+
+**Listener connections** are not stream oriented!  Rather, they wrap a
+listening socket in order to detect new incoming connections.  They
+bypass most of stream logic.  They don't have associated buffers.
+They are implemented in `connection.c`.
 
 
 
-   * DNS "connections"
-   * Listener "connections"
-   * 
 
+>**Note**: "History Time!" You might occasionally find reference to a couple types of connections
+> which no longer exist in modern Tor.  A *CPUWorker connection*
+>connected the main Tor process to a thread or process used for
+>computation.  (Nowadays we use in-process communication.)  Even more
+>anciently, a *DNSWorker connection* connected the main tor process to
+>a separate thread or process used for running `gethostbyname()` or
+>`getaddrinfo()`.  (Nowadays we use Libevent's evdns facility to
+>perform DNS requests asynchronously.)
 
 ### From connections to channels ###
 
 There's an abstraction layer above OR connections (the ones that
-handle cells) and 
+handle cells) and below cells called **Channels**.  A channel's
+purpose is to transmit authenticated cells from one Tor instance
+(relay or client) to another.
+
+Currently, only one implementation exists: Channel_tls, which sends
+and receiveds cells over a TLS-based OR connection.
+
+Cells are sent on a channel using
+`channel_write_{,packed_,var_}cell()`. Incoming cells arrive on a
+channel from its backend using `channel_queue*_cell()`, and are
+immediately processed using `channel_process_cells()`.
+
+Some cell types are handled below the channel layer, such as those
+that affect handshaking only.  And some others are passed up to the
+generic cross-channel code in `command.c`: cells like `DESTROY` and
+`CREATED` are all trivial to handle.  But `RELAY` cells
+require special handling...
+
+### From channels to circuitmux ###
+
+When a relay cell arrives on a circuit, XXXXX ...
+
+
+
+### From circuitmux to circuits: moving bytes from here to there.
