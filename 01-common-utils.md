@@ -1,5 +1,5 @@
 
-== Utility code in Tor
+## Utility code in Tor
 
 Most of Tor's utility code is in modules in the src/common subdirectory.
 
@@ -8,10 +8,10 @@ functions, _containers_, and _cryptography_.  (Someday in the future, it
 would be great to split these modules into separate directories.  Also, some
 functions are probably put in the wrong modules)
 
-==== Compatibility code
+### Compatibility code
 
-These functions live in src/common/compat*.c; some corresponding macros live
-in src/common/compat*.h.  They serve as wrappers around platform-specific or
+These functions live in src/common/compat\*.c; some corresponding macros live
+in src/common/compat\*.h.  They serve as wrappers around platform-specific or
 compiler-specific logic functionality.
 
 In general, the rest of the Tor code *should not* be calling platform-specific
@@ -68,7 +68,7 @@ encoding.
 
 The address.c module interfaces with the system resolver and implements
 address parsing and formatting functions.  It converts sockaddrs to and from
-a more compact *tor_addr_t* type.
+a more compact tor_addr_t type.
 
 The di_ops.c module provides constant-time comparison and associative-array
 operations, for side-channel avoidance.
@@ -84,12 +84,12 @@ The torgzip.c module wraps the zlib library to implement compression.
 
 Workqueue.c provides a simple multithreaded work-queue implementation.
 
-=== Containers
+### Containers
 
 The container.c module defines these container types, used throughout the Tor
 codebase.
 
-There is a dynamic array called *smartlist*, used as our general resizeable
+There is a dynamic array called **smartlist**, used as our general resizeable
 array type.  It supports sorting, searching, common set operations, and so
 on.  It has specialized functions for smartlists of strings, and for
 heap-based priority queues.
@@ -102,7 +102,7 @@ to void \*.  These are what we generally use when we want O(1) lookup.
 Additionally, for containers, we use the ht.h and tor_queue.h headers, in
 src/ext.  These provide intrusive hashtable and linked-list macros.
 
-===  Cryptography
+###  Cryptography
 
 Once, we tried to keep our cryptography code in a single "crypto.c" file,
 with an "aes.c" module containing an AES implementation for use with older

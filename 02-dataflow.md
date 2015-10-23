@@ -1,5 +1,5 @@
 
-== Data flow in the Tor process
+## Data flow in the Tor process ##
 
 We read bytes from the network, we write bytes to the network.  For the
 most part, the bytes we write correspond roughly to bytes we have read,
@@ -7,7 +7,7 @@ with bits of cryptography added in.
 
 The rest is a matter of details.
 
-=== Connections and buffers: reading, writing, and interpreting.
+### Connections and buffers: reading, writing, and interpreting. ###
 
 At a low level, Tor's networking code is based on "connections".  Each
 connection represents an object that can send or receive network-like
@@ -58,28 +58,74 @@ the type of the connection.  For example, if the connection is an
 edge_connection_t, connection_reached_eof() will call
 connection_edge_reached_eof().
 
-   * NOTE: "Also there are bufferevents!"  We have a vestigial
-     implementation for an alternative low-level networking
-     implementation, based on Libevent's evbuffer and bufferevent
-     code.  These two object types take on (most of) the roles of
-     buffers and connections respectively. It isn't working in today's
-     Tor, due to code rot and possible lingering libevent bugs.  More
-     work is needed; it would be good to get this working efficiently
-     again, to have IOCP support on Windows.
+> NOTE: "Also there are bufferevents!"  We have vestigial
+> code for an alternative low-level networking
+> implementation, based on Libevent's evbuffer and bufferevent
+> code.  These two object types take on (most of) the roles of
+> buffers and connections respectively. It isn't working in today's
+> Tor, due to code rot and possible lingering libevent bugs.  More
+> work is needed; it would be good to get this working efficiently
+> again, to have IOCP support on Windows.
 
 
-==== Controlling connections
+#### Controlling connections ####
 
 A connection can have reading or writing enabled or disabled for a
 wide variety of reasons, including:
-   * Writing is disabled when there is no more data to write
 
+   * Writing is disabled when there is no more data to write
    * For some connection types, reading is disabled when the inbuf is
      too full.
-
    * Reading/writing is temporarily disabled on connections that have
-     recently read/written enough data up to their bandwidth limits.
+     recently read/written enough data up to their bandwidth 
+   * Reading is disabled on connections when reading more data from them
+     would require that data to be buffered somewhere else that is
+     already full.
 
-   * Reading is disabled on connections when the circuit that their
-     data would be sent to is XXXX.
+Currently, these conditions are checked in a diffuse set of
+increasingly complex conditional expressions.  In the future, it could
+be helpful to transition to a unified model for handling temporary
+read/write suspensions.
 
+#### Kinds of connections ####
+
+Today Tor has the following connection and pseudoconnection types:
+
+**Edge connections** receive data from and deliver data to points
+outside the onion routing network.  They fall into two types:
+
+**Entry connections** are a type of edge connection. They receive data
+from the user running a Tor client, and deliver data to that user.
+They are used to implement SOCKSPort, TransPort, NATDPort, and so on.
+Sometimes they are called "AP" connections for historical reasons (it
+used to stand for "Application Proxy").
+
+**Exit connections** are a type of edge connection. They exist at an
+exit node, and transmit traffic to and from the network.
+
+(Entry connections and exit connections are also used as placeholders
+when performing a remote DNS request; they are not decoupled from the
+notion of "stream" in the Tor protocol.)
+
+**OR connections** send and receive Tor cells over
+TLS, using some version of the Tor link protocol.
+
+**Directory connections** are server-side or client-side connections
+that implement Tor's HTTP-based directory protocol.  These are
+instantiated using a socket when Tor is making an unencrypted HTTP
+connection.  When Tor is tunneling a directory request over a Tor
+circuit, directory connections
+
+**Controller connections** 
+
+
+
+   * DNS "connections"
+   * Listener "connections"
+   * 
+
+
+### From connections to channels ###
+
+There's an abstraction layer above OR connections (the ones that
+handle cells) and 

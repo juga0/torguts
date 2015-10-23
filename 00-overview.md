@@ -1,5 +1,5 @@
 
-== Overview
+## Overview
 
 This document describes the general structure of the Tor codebase, how
 it fits together, what functionality is available for extending Tor,
@@ -26,7 +26,7 @@ development tools, see doc/HACKING in the repository.
 
 For more information about writing tests, see doc/WritingTests.txt
 
-=== The very high level
+### The very high level
 
 Ultimately, Tor runs as an event-driven network daemon: it responds to
 network events, signals, and timers by sending and receiving things over
@@ -63,7 +63,7 @@ The codebase is divided into a few main subdirectories:
    source distribution.
 
 
-=== Some key high-level abstractions
+### Some key high-level abstractions
 
 The most important abstractions at Tor's high-level are Connections,
 Channels, Circuits, and Nodes.
@@ -93,7 +93,7 @@ connection types.
 A 'Node' is a view of a Tor instance's current knowledge and opinions
 about a Tor relay or bridge.
 
-=== The rest of this document.
+### The rest of this document.
 
 We'll begin with an overview of the various utility functions available
 in Tor's 'common' directory.  Knowing about these is key to writing
