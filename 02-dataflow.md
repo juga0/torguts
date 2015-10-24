@@ -30,7 +30,7 @@ main.c, in the functions connection_{start,stop}_{reading,writing}.
 
 When a read or write event is turned on, the main libevent loop polls
 the kernel, asking which sockets are ready to read or write.  (This
-polling happens in thxe event_base_loop() call in run_main_loop_once()
+polling happens in the event_base_loop() call in run_main_loop_once()
 in main.c.)  When libevent finds a socket that's ready to read or write,
 it invokes conn_{read,write}_callback(), also in main.c
 

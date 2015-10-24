@@ -27,7 +27,7 @@ and procmon.c, which handles monitoring a child process.
 Parts of address.c are compatibility code for handling network addressing
 issues; other parts are in util.c.
 
-Notable compatibility ares are:
+Notable compatibility areas are:
 
    * mmap support for mapping files into the address space (read-only)
 
