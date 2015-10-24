@@ -7,6 +7,9 @@ with bits of cryptography added in.
 
 The rest is a matter of details.
 
+[XXX: Can we have a diagram or two that shows how connections, channels,
+circuitmuxes etc. are related? Some ASCII art is fine.]
+
 ### Connections and buffers: reading, writing, and interpreting. ###
 
 At a low level, Tor's networking code is based on "connections".  Each
@@ -138,7 +141,7 @@ listening socket in order to detect new incoming connections.  They
 bypass most of stream logic.  They don't have associated buffers.
 They are implemented in `connection.c`.
 
-
+[XXX: maybe mention the C structs that encapsulate the above things?]
 
 
 >**Note**: "History Time!" You might occasionally find reference to a couple types of connections
