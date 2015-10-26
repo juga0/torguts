@@ -22,10 +22,10 @@ This document is not an overview of the Tor protocol.  For that, see the
 design paper and the specifications at https://spec.torproject.org/ .
 
 For more information about Tor's coding standards and some helpful
-development tools, see doc/HACKING in the [XXX: which?] repository.
+development tools, see doc/HACKING in the Tor repository.
 
-For more information about writing tests, see doc/WritingTests.txt
-[XXX: where? We should say that it's in Tor repo.]
+For more information about writing tests, see doc/HACKING/WritingTests.txt
+in the Tor repository.
 
 ### The very high level
 

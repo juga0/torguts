@@ -7,8 +7,7 @@ with bits of cryptography added in.
 
 The rest is a matter of details.
 
-[XXX: Can we have a diagram or two that shows how connections, channels,
-circuitmuxes etc. are related? Some ASCII art is fine.]
+[XXX: Add a diagram here]
 
 ### Connections and buffers: reading, writing, and interpreting. ###
 
@@ -134,15 +133,14 @@ connection pair (see below).  Directory connections are implemeted in
 
 **Controller connections** are local connections to a controller
 process implementing the controller protocol from
-control-spec.txt. These are in `control.c`
+control-spec.txt. These are in `control.c`.
 
 **Listener connections** are not stream oriented!  Rather, they wrap a
 listening socket in order to detect new incoming connections.  They
 bypass most of stream logic.  They don't have associated buffers.
 They are implemented in `connection.c`.
 
-[XXX: maybe mention the C structs that encapsulate the above things?]
-
+[XXXX struct/inheritance diagram]
 
 >**Note**: "History Time!" You might occasionally find reference to a couple types of connections
 > which no longer exist in modern Tor.  A *CPUWorker connection*
