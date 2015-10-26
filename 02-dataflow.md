@@ -7,7 +7,7 @@ with bits of cryptography added in.
 
 The rest is a matter of details.
 
-[XXX: Add a diagram here]
+![Diagram of main data flows in Tor](./diagrams/02/02-dataflow.png "Diagram of main data flows in Tor")
 
 ### Connections and buffers: reading, writing, and interpreting. ###
 
@@ -140,7 +140,7 @@ listening socket in order to detect new incoming connections.  They
 bypass most of stream logic.  They don't have associated buffers.
 They are implemented in `connection.c`.
 
-[XXXX struct/inheritance diagram]
+![structure hierarchy for connection types](./diagrams/02/02-connection-types.png "structure hierarchy for connection types")
 
 >**Note**: "History Time!" You might occasionally find reference to a couple types of connections
 > which no longer exist in modern Tor.  A *CPUWorker connection*
