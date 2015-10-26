@@ -151,6 +151,24 @@ They are implemented in `connection.c`.
 >`getaddrinfo()`.  (Nowadays we use Libevent's evdns facility to
 >perform DNS requests asynchronously.)
 
+#### Linked connections ####
+
+Sometimes two channels are joined together, such that data which the
+Tor process sends on one should immediately be received by the same
+Tor process on the other.  (For example, when Tor makes a tunneled
+directory connection, this is implemented on the client side as a
+directory connection whose output goes, not to the network, but to a
+local entry connection. And when a directory receives a tunnelled
+directory connection, this is implemented as an exit connection whose
+output goes, not to the network, but to a local directory connection.)
+
+The earliest versions of Tor to support linked connections used
+socketpairs for the purpose.  But using socketpairs forced us to copy
+data through kernelspace, and wasted limited file descriptors.  So
+instead, a pair of connections can be linked in-process.  Each linked
+connection has a pointer to the other, such that data written on one
+is immediately readable on the other, and vice versa.
+
 ### From connections to channels ###
 
 There's an abstraction layer above OR connections (the ones that
@@ -169,13 +187,50 @@ immediately processed using `channel_process_cells()`.
 Some cell types are handled below the channel layer, such as those
 that affect handshaking only.  And some others are passed up to the
 generic cross-channel code in `command.c`: cells like `DESTROY` and
-`CREATED` are all trivial to handle.  But `RELAY` cells
+`CREATED` are all trivial to handle.  But relay cells
 require special handling...
 
-### From channels to circuitmux ###
+### From channels through circuits ###
 
-When a relay cell arrives on a circuit, XXXXX ...
+When a relay cell arrives on an existing circuit, it is handled in
+`circuit_receive_relay_cell()` -- one of the innermost functions in
+Tor.  This function encrypts or decrypts the relay cell as
+appropriate, and decides whether the cell is intended for the current
+hop of the circuit.
 
+If the cell *is* intended for the current hop, we pass it to
+`connection_edge_process_relay_cell()` in `relay.c`, which acts on it
+based on its relay command, and (possibly) queues its data on an
+`edge_connection_t`.
 
+If the cell *is not* intended for the current hop, we queue it for the
+next channel in sequence with `append cell_to_circuit_queue()`.  This
+places the cell on a per-circuit queue for cells headed out on that
+particular channel.
 
-### From circuitmux to circuits: moving bytes from here to there.
+### Sending cells on circuits: the complicated bit. ###
+
+Relay cells are queued onto circuits from one of two (main) sources:
+reading data from edge connections, and receiving a cell to be relayed
+on a circuit.  Both of these sources place their cells on cell queue:
+each circuit has one cell queue for each direction that it travels.
+
+A naive implementation would skip using cell queues, and instead write
+each outgoing relay cell.  (Tor did this in its earlier versions.)
+But such an approach tends to give poor performance, because it allows
+high-volume circuits to clog channels, and it forces the Tor server to
+send data queued on a circuit even after that circuit has been closed.
+
+So by using queues on each circuit, we can add cells to each channel
+on a just-in-time basis, choosing the cell at each moment based on the
+a performance-aware algorithm.
+
+This logic is implemented in two main modules: `scheduler.c` and
+`circuitmux*.c`.  The scheduler code is responsible for determining
+globally, across all channels that could write cells, which one should
+next receive queued cellst.  The circuitmux code determines, for all
+of the circuits with queued cells for a channel, which one should
+queue the next cell.
+
+(This logic applies to outgoing relay cells only; incoming relay cells
+are processed as they arrive.)

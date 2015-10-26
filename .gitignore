@@ -1,4 +1,9 @@
 
+# Editor junk
+*.swp
 *~
+.#*
+\#*#
 
+# output
 *.html

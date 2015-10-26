@@ -1,5 +1,5 @@
 
-## Overview
+## Overview ##
 
 This document describes the general structure of the Tor codebase, how
 it fits together, what functionality is available for extending Tor,
@@ -27,7 +27,7 @@ development tools, see doc/HACKING in the Tor repository.
 For more information about writing tests, see doc/HACKING/WritingTests.txt
 in the Tor repository.
 
-### The very high level
+### The very high level ###
 
 Ultimately, Tor runs as an event-driven network daemon: it responds to
 network events, signals, and timers by sending and receiving things over
@@ -63,8 +63,10 @@ The codebase is divided into a few main subdirectories:
    src/ext -- Code maintained elsewhere that we include in the Tor
    source distribution.
 
+   src/trunnel -- automatically generated code (from the Trunnel)
+   tool: used to parse and encode binary formats.
 
-### Some key high-level abstractions
+### Some key high-level abstractions ###
 
 The most important abstractions at Tor's high-level are Connections,
 Channels, Circuits, and Nodes.
@@ -92,9 +94,12 @@ If we switch to other strategies in the future, we'll have more
 connection types.
 
 A 'Node' is a view of a Tor instance's current knowledge and opinions
-about a Tor relay or bridge.
+about a Tor relay orbridge.
 
-### The rest of this document.
+### The rest of this document. ###
+
+> **Note**: This section describes the eventual organization of this
+> document, which is not yet complete.
 
 We'll begin with an overview of the various utility functions available
 in Tor's 'common' directory.  Knowing about these is key to writing
@@ -104,9 +109,11 @@ Then we'll go on and talk about the main data-flow of the Tor network:
 how Tor generates and responds to network traffic.  This will occupy a
 chapter for the main overview, with other chapters for special topics.
 
+After that, we'll mention the main modules in Tor, and describe the
+function of each.
+
 We'll cover the directory subsystem next: how Tor learns about other
 relays, and how relays advertise themselves.
-
 
 Then we'll cover a few specialized modules, such as hidden services,
 sandboxing, hibernation, accounting, statistics, guards, path
