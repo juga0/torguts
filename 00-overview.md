@@ -117,7 +117,7 @@ relays, and how relays advertise themselves.
 
 Then we'll cover a few specialized modules, such as hidden services,
 sandboxing, hibernation, accounting, statistics, guards, path
-generation, pluggable transports,  and how they integrate with the rest of Tor.
+generation, pluggable transports, and how they integrate with the rest of Tor.
 
 We'll close with a meandering overview of important pending issues in
 the Tor codebase, and how they affect the future of the Tor software.
