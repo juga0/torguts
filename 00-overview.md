@@ -36,7 +36,7 @@ same codebase: the Tor process will run as a client, relay, or authority
 depending on its configuration.
 
 Tor has a few major dependencies, including Libevent (used to tell which
-sockets are readable and writable), OpenSSL (used for many encyrption
+sockets are readable and writable), OpenSSL (used for many encryption
 functions, and to implement the TLS protocol), and zlib (used to
 compress and uncompress directory information).
 
