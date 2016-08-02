@@ -31,3 +31,18 @@ getpass, ntohll, htonll, strdup,   [This list is incomplete.]
 
 Don't create or close sockets directly. Instead use the wrappers in
 compat.h.
+
+When creating new APIs, only use 'char *' to represent 'pointer to a
+nul-terminated string'.  Represent 'pointer to a chunk of memory' as
+'uint8_t *'.  [Many older Tor APIs ignore this rule.]
+
+Don't encode/decode u32, u64, or u16 to byte arrays by casting
+pointers. That can crash if the pointers aren't aligned, and can cause
+endianness problems.  Instead say something more like set_uint32(ptr,
+htonl(foo)) to encode, and ntohl(get_uint32(ptr)) to decode.
+
+Don't declare a 0-argument function with "void foo()".  That's C++
+syntax. In C you say "void foo(void)".
+
+When creating new APIs, use const everywhere you reasonably can.
+

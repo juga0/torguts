@@ -37,4 +37,7 @@ platforms that have them, so we provide our own variants in
 src/ext/tor_queue.h .
 
 We also provide an intrusive hashtable implementation in src/ext/ht.h
+. When you're using it, you'll need to define your own hash
+functions. If attacker-induced collisions are a worry here, use the
+cryptographic siphash24g function to extract hashes.
 
