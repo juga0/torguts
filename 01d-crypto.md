@@ -45,8 +45,8 @@ crypto_digest_get_digest().  You can copy the state of one of these
 objects using crypto_digest_dup() or crypto_digest_assign().
 
 We support the HMAC hash-based message authentication code
-instantiated using SHA256. See crypto_hmac_sha256.  [You should not
-add any HMAC users with SHA1, and HMAC is not necessaryr with SHA3.]
+instantiated using SHA256. See crypto_hmac_sha256.  (You should not
+add any HMAC users with SHA1, and HMAC is not necessary with SHA3.)
 
 We also support the SHA3 cousins, SHAKE128 and SHAKE256.  Unlike
 digests, these are extendable output functions (or XOFs) where you can
