@@ -9,7 +9,7 @@ HTML= \
 	01c-time.html \
 	01d-crypto.html \
 	01e-os-compat.html \
-	01f-threads.html
+	01f-threads.html \
 	02-dataflow.html \
 	03-modules.html \
 
