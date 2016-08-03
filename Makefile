@@ -25,3 +25,7 @@ generated: $(HTML) $(PNG)
 
 %.png: %.dia
 	dia $< --export=$@
+
+clean:
+	rm -f $(HTML)
+	rm -f $(PNG)
