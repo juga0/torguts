@@ -46,3 +46,5 @@ syntax. In C you say "void foo(void)".
 
 When creating new APIs, use const everywhere you reasonably can.
 
+Sockets should have type tor_socket_t, not int.
+
