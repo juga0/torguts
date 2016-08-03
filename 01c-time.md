@@ -1,7 +1,7 @@
 
-## Time in tor
+## Time in tor ##
 
-### What time is it?
+### What time is it? ###
 
 We have several notions of the current time in Tor.
 
@@ -19,7 +19,7 @@ monotime_coarse_\* functions in compat_time.h. It is the same as
 monotime_\* on some platforms. On others, it gives a monotonic timer
 with less precision, but which it's more efficient to access.
 
-### Cached views of time.
+### Cached views of time. ###
 
 On some systems (like Linux), many time functions use a VDSO to avoid
 the overhead of a system call.  But on other systems, gettimeofday()
@@ -29,7 +29,7 @@ accurate, view of the current time, see approx_time() and
 tor_gettimeofday_cached().
 
 
-### Parsing and encoding time values
+### Parsing and encoding time values ###
 
 Tor has functions to parse and format time in these formats:
 
@@ -50,3 +50,26 @@ Some of these functions use struct tm. You can use the standard
 tor_localtime_r and tor_gmtime_r() to wrap these in a safe way. We
 also have a tor_timegm() function.
 
+### Scheduling events ###
+
+The main way to schedule a not-too-frequent periodic event with
+respect to the Tor mainloop is via the mechanism in periodic.c.
+There's a big table of periodic_events in main.c, each of which gets
+invoked on its own schedule.  You should not expect more than about
+one second of accuracy with these timers.
+
+You can create an independent timer using libevent directly, or using
+the periodic_timer_new() function.  But you should avoid doing this
+for per-connection or per-circuit timers: Libevent's internal timer
+implementation uses a min-heap, and those tend to start scaling poorly
+once you have a few thousand entries.
+
+If you need to create a large number of fine-grained timers for some
+purpose, you should consider the mechanism in src/common/timers.c,
+which is optimized for the case where you have a large number of
+timers with not-too-long duration, many of which will be deleted
+before they actually expire. These timers should be reasonably
+accurate within a handful of milliseconds -- possibly better on some
+platforms.  (The timers.c module uses William Ahern's timeout.c
+implementation as its backend, which is based on a hierarchical timing
+wheel algorithm. It's cool stuff; check it out.)
