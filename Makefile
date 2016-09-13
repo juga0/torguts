@@ -10,8 +10,10 @@ HTML= \
 	01d-crypto.html \
 	01e-os-compat.html \
 	01f-threads.html \
+	01g-strings.html \
 	02-dataflow.html \
 	03-modules.html \
+	this-not-that.html
 
 PNG = \
 	diagrams/02/02-dataflow.png \
