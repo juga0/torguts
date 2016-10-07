@@ -207,7 +207,7 @@ of Tor nodes, determines which entries across all the votes correspond
 to the same nodes, and yields them in a useful order.
 
 `dirvote.c`
-: Implements the directory voting algoritms that authorities use.
+: Implements the directory voting algorithms that authorities use.
 
 `keypin.c`
 : Implements a persistent key-pinning mechanism to tie RSA1024

@@ -35,7 +35,7 @@ outputs.  We support one 160-bit digest (SHA1), two 256-bit digests
 
 You should not use SHA1 for anything new.
 
-The crypto_digest\*() family of functions maniuplates digests.  You
+The crypto_digest\*() family of functions manipulates digests.  You
 can either compute a digest of a chunk of memory all at once using
 crypto_digest(), crypto_digest256(), or crypto_digest512().  Or you
 can create a crypto_digest_t object with

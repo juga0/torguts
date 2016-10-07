@@ -26,7 +26,7 @@ implemented as a linked queue of memory extents, in the style of classic
 BSD mbufs, or Linux skbufs.
 
 A connection's reading and writing can be enabled or disabled.  Under
-the hood, this fuctionality is implemented using libevent events: one
+the hood, this functionality is implemented using libevent events: one
 for reading, one for writing.  These events are turned on/off in
 main.c, in the functions connection_{start,stop}_{reading,writing}.
 
@@ -127,7 +127,7 @@ that implement Tor's HTTP-based directory protocol.  These are
 instantiated using a socket when Tor is making an unencrypted HTTP
 connection.  When Tor is tunneling a directory request over a Tor
 circuit, directory connections are implemented using a linked
-connection pair (see below).  Directory connections are implemeted in
+connection pair (see below).  Directory connections are implemented in
 `directory.c`; some of the server-side logic is implemented in
 `dirserver.c`.
 
@@ -222,7 +222,7 @@ high-volume circuits to clog channels, and it forces the Tor server to
 send data queued on a circuit even after that circuit has been closed.
 
 So by using queues on each circuit, we can add cells to each channel
-on a just-in-time basis, choosing the cell at each moment based on the
+on a just-in-time basis, choosing the cell at each moment based on
 a performance-aware algorithm.
 
 This logic is implemented in two main modules: `scheduler.c` and
