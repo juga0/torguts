@@ -228,7 +228,7 @@ a performance-aware algorithm.
 This logic is implemented in two main modules: `scheduler.c` and
 `circuitmux*.c`.  The scheduler code is responsible for determining
 globally, across all channels that could write cells, which one should
-next receive queued cellst.  The circuitmux code determines, for all
+next receive queued cells.  The circuitmux code determines, for all
 of the circuits with queued cells for a channel, which one should
 queue the next cell.
 

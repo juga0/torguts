@@ -53,7 +53,7 @@ probably better (we think) to have a memory target where we dynamically free
 things ahead of time in order to stay under the target.  Trying to respond to
 an OOM at the point of tor_malloc() failure, on the other hand, would involve
 a rare operation invoked from deep in the call stack.  (Again, that's
-error-prone and hard to debug.
+error-prone and hard to debug.)
 
 Third, thanks to the rise of Linux and other operating systems that allow
 memory to be overcommitted, you can't actually ever rely on getting a NULL

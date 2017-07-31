@@ -22,7 +22,7 @@ Those modules also have functions for manipulating paths a bit.
 
 Nearly all the world is on a Berkeley sockets API, except for
 windows, whose version of the Berkeley API was corrupted by late-90s
-insistence on backword compatibility with the
+insistence on backward compatibility with the
 sort-of-berkeley-sort-of-not add-on *thing* that was WinSocks.
 
 What's more, everybody who implemented sockets realized that select()
