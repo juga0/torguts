@@ -1,7 +1,8 @@
 
 Don't use memcmp.  Use {tor,fast}_{memeq,memneq,memcmp}.
 
-Don't use assert.  Use tor_assert or tor_assert_nonfatal or BUG.
+Don't use assert.  Use tor_assert or tor_assert_nonfatal or BUG.  Prefer
+nonfatal assertions or BUG()s.
 
 Don't use sprintf or snprintf.  Use tor_asprintf or tor_snprintf.
 
@@ -32,9 +33,9 @@ getpass, ntohll, htonll, strdup,   (This list is incomplete.)
 Don't create or close sockets directly. Instead use the wrappers in
 compat.h.
 
-When creating new APIs, only use 'char *' to represent 'pointer to a
+When creating new APIs, only use 'char \*' to represent 'pointer to a
 nul-terminated string'.  Represent 'pointer to a chunk of memory' as
-'uint8_t *'.  (Many older Tor APIs ignore this rule.)
+'uint8_t \*'.  (Many older Tor APIs ignore this rule.)
 
 Don't encode/decode u32, u64, or u16 to byte arrays by casting
 pointers. That can crash if the pointers aren't aligned, and can cause
