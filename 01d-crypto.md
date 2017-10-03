@@ -11,7 +11,7 @@ Cryptography functionality that's available is described below.
 
 The most basic RNG capability in Tor is the crypto_rand() family of
 functions. These currently use OpenSSL's RAND_() backend, but may use
-something faster in the future.  The crypto_rand() functions
+something faster in the future.
 
 In addition to crypto_rand(), which fills in a buffer with random
 bytes, we also have functions to produce random integers in certain
