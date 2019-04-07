@@ -1,34 +1,27 @@
+# Minimal makefile for Sphinx documentation
+#
 
-
-
-HTML= \
-	00-overview.html \
-	01-common-utils.html \
-	01a-memory.html \
-	01b-collections.html \
-	01c-time.html \
-	01d-crypto.html \
-	01e-os-compat.html \
-	01f-threads.html \
-	01g-strings.html \
-	02-dataflow.html \
-	03-modules.html \
-	this-not-that.html
+# You can set these variables from the command line.
+SPHINXOPTS    =
+SPHINXBUILD   = sphinx-build
+SOURCEDIR     = .
+BUILDDIR      = build
 
 PNG = \
 	diagrams/02/02-dataflow.png \
 	diagrams/02/02-connection-types.png
 
-all: generated
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-generated: $(HTML) $(PNG)
+.PHONY: help Makefile
 
-%.html: %.md
-	maruku $< -o $@
+# How to include this in the html target that is not in this file?
+# %.png: %.dia
+# 	dia $< --export=$@
 
-%.png: %.dia
-	dia $< --export=$@
-
-clean:
-	rm -f $(HTML)
-	rm -f $(PNG)
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
