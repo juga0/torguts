@@ -1,3 +1,5 @@
+This not that
+==============
 
 Don't use memcmp.  Use {tor,fast}_{memeq,memneq,memcmp}.
 
